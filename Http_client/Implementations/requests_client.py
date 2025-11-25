@@ -1,17 +1,29 @@
-from Http_client.http_client import HTTPClient
-from typing import Literal, TypeVar
+from Http_client.http_client import HTTPClient, U, T
+from typing import Literal
 
 import requests
 
-T = TypeVar('T')
-U = TypeVar('U')
-
 
 class RequestsClient(HTTPClient):
-    async def _fetch_data(self,
+    def __init__(self):
+        super().__init__()
+        self._session: requests.Session = requests.Session()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self._session.close()
+
+    def _fetch_data(self,
                          bearer_token: str,
                          endpoint: str,
                          method: Literal["GET", "POST"],
                          data: U | None = None
                          ) -> T:
-        pass
+        headers = {"Authorization": f"Bearer {bearer_token}"}
+        url = f"{self._base_url}{endpoint}"
+
+        response = self._session.request(method, url, headers=headers, json=data)
+        response.raise_for_status()
+        return response.json()
