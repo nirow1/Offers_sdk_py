@@ -30,8 +30,5 @@ class AiohttpClient(HTTPClient):
         url = f"{self._base_url}{endpoint}"
 
         async with self._session.request(method, url, headers=headers, json=data) as response:
-            try:
-                response.raise_for_status()
-            except aiohttp.ClientResponseError as e:
-                raise HTTPError(response.status, f"HTTP request failed: {e.message}") from e
-            return await response.json()  # type: ignore
+            response.raise_for_status()
+            return await response.json() # Await as aiohttp response.json() is a coroutine
