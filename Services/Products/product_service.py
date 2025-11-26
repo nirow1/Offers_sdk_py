@@ -1,4 +1,6 @@
 from Http_client import http_client
+from Services.base_services_client import BaseServicesClient
 
-class OffersApiClient():
+
+class ProductsService(BaseServicesClient):
     pass
