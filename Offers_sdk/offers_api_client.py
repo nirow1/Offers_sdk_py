@@ -1,12 +1,12 @@
 import asyncio
 
-from Core.Api_services.Requests.register_product_req import RegisterProductRequest
-from Http_client.Implementations.aiohttp_client import AiohttpClient
-from Services.Products.product_service import ProductsService
-from Services.services_config import base_aiohttp_config
-from Services.Products.auth_service import AuthService
-from Validation.schemas import RegisterProductSchema
-from Http_client.http_client import HTTPClient
+from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
+from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
+from Offers_sdk.Services.Products.product_service import ProductsService
+from Offers_sdk.Services.services_config import base_aiohttp_config
+from Offers_sdk.Services.Products.auth_service import AuthService
+from Offers_sdk.Validation.schemas import RegisterProductSchema
+from Offers_sdk.Http_client.http_client import HTTPClient
 
 
 class OffersApiClient:

@@ -1,8 +1,8 @@
-from Http_client.http_client import HTTPClient
-from Services.base_services_client import BaseServicesClient
-from Core.Api_services.Requests.register_product_req import RegisterProductRequest
-from Core.Api_services.Responces.product_offers_response import ProductOffersResponse
-from Core.Api_services.Responces.register_product_response import RegisterProductResponse
+from Offers_sdk.Http_client.http_client import HTTPClient
+from Offers_sdk.Services.base_services_client import BaseServicesClient
+from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
+from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
+from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
 
 
 class ProductsService(BaseServicesClient):

@@ -1,7 +1,7 @@
 import asyncio
 
-from Core.Errors.http_errors import HTTPError
-from typing import TypeVar, Generic, Literal
+from Offers_sdk.Core.Errors.http_errors import HTTPError
+from typing import TypeVar, Literal
 from abc import ABC, abstractmethod
 
 T = TypeVar('T')

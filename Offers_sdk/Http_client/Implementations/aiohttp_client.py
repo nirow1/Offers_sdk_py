@@ -1,4 +1,4 @@
-from Http_client.http_client import HTTPClient, U, T
+from Offers_sdk.Http_client.http_client import HTTPClient, U, T
 from typing import Literal, Optional, Any
 
 import aiohttp

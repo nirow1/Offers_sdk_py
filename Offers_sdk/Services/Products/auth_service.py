@@ -1,8 +1,8 @@
 import os
 from typing import Optional
 from datetime import datetime, timedelta
-from Services.base_services_client import BaseServicesClient
-from Core.Api_services.Responces.auth_response import AuthResponse
+from Offers_sdk.Services.base_services_client import BaseServicesClient
+from Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
 
 
 class AuthService(BaseServicesClient):

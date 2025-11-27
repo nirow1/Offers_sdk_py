@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from Http_client.http_client import HTTPClient
+from Offers_sdk.Http_client.http_client import HTTPClient
 
 
 class BaseServicesClient(ABC):
