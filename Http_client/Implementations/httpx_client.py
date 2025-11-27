@@ -4,7 +4,7 @@ from typing import Literal
 import httpx
 
 
-class HTTPXClient(HTTPClient):
+class HttpxClient(HTTPClient):
     def __init__(self):
         super().__init__()
         self._client: httpx.AsyncClient = httpx.AsyncClient()

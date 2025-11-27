@@ -1,18 +1,18 @@
 from Http_client.http_client import HTTPClient, U, T
-from Core.Errors.http_errors import HTTPError
-from typing import Literal, Optional
+from typing import Literal, Optional, Any
 
 import aiohttp
 
 
 class AiohttpClient(HTTPClient):
-    def __init__(self):
+    def __init__(self, **session_kwargs: Any):
         super().__init__()
-        self._session: aiohttp.ClientSession | None = None
+        self._session: Optional[aiohttp.ClientSession] = None
+        self._session_kwargs = session_kwargs
 
     async def __aenter__(self):
         # Create session when entering context
-        self._session = aiohttp.ClientSession()
+        self._session = aiohttp.ClientSession(**self._session_kwargs)
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
