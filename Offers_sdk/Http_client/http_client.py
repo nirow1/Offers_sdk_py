@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 from Offers_sdk.Core.Errors.http_errors import HTTPError
 from typing import TypeVar, Literal
@@ -9,8 +10,8 @@ U = TypeVar('U')
 
 class HTTPClient(ABC):
     def __init__(self) -> None:
-        self._max_retries: int = 3
-        self._base_url: str = "https://api.example.com"
+        self._max_retries: int = int(os.environ["MAX_API_REQUEST_RETRIES"])
+        self._base_url: str = "http://localhost:8000"
 
     async def request(self,
                       bearer_token: str,

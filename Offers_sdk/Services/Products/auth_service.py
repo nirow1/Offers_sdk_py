@@ -25,7 +25,8 @@ class AuthService(BaseServicesClient):
 
         response: AuthResponse = await self._http_client.request(bearer_token=self._refresh_token,
                                                                  endpoint=self._endpoint_base,
-                                                                 method="POST")
+                                                                 method="POST",
+                                                                 data={"username": "demo", "password": "demo"})
 
         self._access_token = response["access_token"]
         self._access_token_expiration = datetime.now() + timedelta(minutes=5)
