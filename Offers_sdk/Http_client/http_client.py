@@ -8,17 +8,18 @@ from abc import ABC, abstractmethod
 T = TypeVar('T')
 U = TypeVar('U')
 
-class HTTPClient(ABC):
-    def __init__(self) -> None:
-        self._max_retries: int = int(os.environ["MAX_API_REQUEST_RETRIES"])
-        self._base_url: str = "http://localhost:8000"
+class HttpClient(ABC):
+    def __init__(self,
+                 base_url: str | None = None,
+                 max_retries: int | None = None) -> None:
+        self._base_url: str = base_url or os.environ.get("API_BASE_URL", "")
+        self._max_retries: int = max_retries or int(os.environ.get("MAX_API_REQUEST_RETRIES", "3"))
 
     async def request(self,
                       bearer_token: str,
                       endpoint: str,
                       method: Literal["GET", "POST"],
-                      data: U | None = None
-                      ) -> T:
+                      data: U | None = None) -> T:
         last_error: Exception | None = None
 
         for attempt in range(1, self._max_retries + 1):
@@ -39,7 +40,14 @@ class HTTPClient(ABC):
     async def _fetch_data(self,
                          bearer_token: str,
                          endpoint: str,
-                          method: Literal["GET", "POST"],
-                         data: U | None = None
-                         ) -> T:
-        pass
+                         method: Literal["GET", "POST"],
+                         data: U | None = None) -> T:
+        ...
+
+    @abstractmethod
+    async def __aenter__(self):
+        ...
+
+    @abstractmethod
+    async def __aexit__(self, exc_type, exc, tb):
+        ...

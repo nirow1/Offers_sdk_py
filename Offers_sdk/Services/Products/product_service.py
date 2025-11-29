@@ -1,4 +1,4 @@
-from Offers_sdk.Http_client.http_client import HTTPClient
+from Offers_sdk.Http_client.http_client import HttpClient
 from Offers_sdk.Services.base_services_client import BaseServicesClient
 from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
 from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
@@ -6,7 +6,7 @@ from Offers_sdk.Core.Api_services.Responces.register_product_response import Reg
 
 
 class ProductsService(BaseServicesClient):
-    def __init__(self, http_client: HTTPClient):
+    def __init__(self, http_client: HttpClient):
         super().__init__(http_client)
         self._endpoint_base = "/api/v1/products"
 

@@ -3,10 +3,10 @@ import pytest
 from uuid import UUID
 from dotenv import load_dotenv
 from Offers_sdk.offers_api_client import OffersApiClient
-from Offers_sdk.Http_client.http_client import HTTPClient
+from Offers_sdk.Http_client.http_client import HttpClient
 
 # --- Fakes for testing ---
-class FakeHttpClient(HTTPClient):
+class FakeHttpClient(HttpClient):
     async def _fetch_data(self, bearer_token, endpoint, method, data=None):
         # Always return a predictable response
         return {"status": "ok"}
@@ -50,3 +50,5 @@ async def test_register_product_validates_schema_fail():
     async with OffersApiClient(http_client=fake_http) as client:
         with pytest.raises(ValueError):
             await client.register_product(product)
+
+#todo: add test to test passing different http clients

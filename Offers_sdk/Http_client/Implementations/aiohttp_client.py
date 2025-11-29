@@ -1,12 +1,12 @@
-from Offers_sdk.Http_client.http_client import HTTPClient, U, T
+from Offers_sdk.Http_client.http_client import HttpClient, U, T
 from typing import Literal, Optional, Any
 
 import aiohttp
 
-
-class AiohttpClient(HTTPClient):
-    def __init__(self, **session_kwargs: Any):
-        super().__init__()
+# todo: test what happens if session_kwargs are wrong
+class AiohttpClient(HttpClient):
+    def __init__(self, base_url: str | None = None, **session_kwargs: Any):
+        super().__init__(base_url=base_url)
         self._session: Optional[aiohttp.ClientSession] = None
         self._session_kwargs = session_kwargs
 

@@ -5,5 +5,5 @@ base_aiohttp_config = {
     "headers": {
         "Accept": "application/json",
     },
-    "timeout": aiohttp.ClientTimeout(total=30),  # optional
+    "timeout": aiohttp.ClientTimeout(total=30),
 }

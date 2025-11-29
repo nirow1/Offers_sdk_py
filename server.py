@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from uuid import UUID
 
 app = Flask(__name__)
 products = {}  # simple in-memory store
@@ -22,7 +21,6 @@ def register_product():
         "items_in_stock": 10
     }
     return jsonify({"status": "ok", "product": data})
-
 
 @app.route("/api/v1/products/<product_id>/offers", methods=["GET"])
 def get_product_offers(product_id):

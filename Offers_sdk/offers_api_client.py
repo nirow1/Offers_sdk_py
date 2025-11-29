@@ -1,7 +1,4 @@
 import asyncio
-from multiprocessing.context import AuthenticationError
-
-from pydantic import ValidationError
 
 from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
 from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
@@ -9,17 +6,18 @@ from Offers_sdk.Services.Products.product_service import ProductsService
 from Offers_sdk.Services.services_config import base_aiohttp_config
 from Offers_sdk.Services.Products.auth_service import AuthService
 from Offers_sdk.Validation.schemas import RegisterProductSchema
-from Offers_sdk.Http_client.http_client import HTTPClient
+from Offers_sdk.Http_client.http_client import HttpClient
+from multiprocessing.context import AuthenticationError
+from pydantic import ValidationError
 
 
 class OffersApiClient:
-    def __init__(self, http_client: HTTPClient | None = None):
+    def __init__(self, http_client: HttpClient | None = None):
         self.http_client = http_client if http_client is not None else AiohttpClient(**base_aiohttp_config)
         self._products_service: ProductsService= ProductsService(self.http_client)
         self._auth_service: AuthService= AuthService(self.http_client)
 
     async def __aenter__(self):
-        # If the http_client supports context management, enter it
         if hasattr(self.http_client, "__aenter__"):
             await self.http_client.__aenter__()
         return self
@@ -34,6 +32,7 @@ class OffersApiClient:
             bearer_token = await self._auth_service.authenticate()
             payload = validated.model_dump(mode='json')
             return await self._products_service.register_product(bearer_token, payload)
+
         except ValidationError as e:
             raise ValueError(f"Invalid product payload: {e}") from e
 
@@ -55,5 +54,12 @@ class OffersApiClient:
         return results
 
     async def get_offers(self, product_id: str):
-        bearer_token = await self._auth_service.authenticate()
-        return await self._products_service.get_product_offers(bearer_token, product_id)
+        try:
+            bearer_token = await self._auth_service.authenticate()
+            return await self._products_service.get_product_offers(bearer_token, product_id)
+        #todo: change this to actuall exception
+        except ValidationError as e:
+            raise ValueError(f"Product id was not found: {e}") from e
+
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error in register_product: {e}") from e
