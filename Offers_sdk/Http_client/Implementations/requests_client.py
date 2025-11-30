@@ -5,8 +5,8 @@ import requests
 
 
 class RequestsClient(HttpClient):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, base_url: str | None = None):
+        super().__init__(base_url=base_url)
         self._session: requests.Session = requests.Session()
 
     def __aenter__(self):
