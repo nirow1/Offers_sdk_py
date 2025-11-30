@@ -1,6 +1,12 @@
+from uuid import UUID
+
+from Offers_sdk.Core.Errors.Product_service_errors.id_not_found_error import IdNotFoundError
+from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
+from Offers_sdk.Core.Errors.Product_service_errors.unauthorized_access_error import UnauthorizedAccessError
+from Offers_sdk.Core.Errors.http_errors import HttpError
 from Offers_sdk.Http_client.http_client import HttpClient
 from Offers_sdk.Services.base_services_client import BaseServicesClient
-from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
+from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
 from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
 from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
 
@@ -23,8 +29,19 @@ class ProductsService(BaseServicesClient):
                                          register_product_req)
 
     async def get_product_offers(self, bearer_token: str,
-                                 product_id: str
-                                 ) -> ProductOffersResponse:
-        return await self._http_client.request(bearer_token,
-                                         f"{self.endpoint_base}/{product_id}/offers",
-                                         "GET")
+                                 product_id: str) -> ProductOffersResponse:
+        url = f"{self.endpoint_base}/{product_id}/offers"
+
+        try:
+            response = await self._http_client.request(bearer_token, url, "GET")
+        except HttpError as e:
+            if e.status_code == 401:
+                raise UnauthorizedAccessError(401, f"Unauthorized access when fetching offers for product {product_id}: {e}") from e
+            elif e.status_code == 404:
+                raise IdNotFoundError(404, f"Product with id {product_id} not found: {e}") from e
+            elif e.status_code == 422:
+                raise ProductServiceError(e.status_code, f"Product request validation failed {product_id}: {e}") from e
+            else:
+                raise ProductServiceError(e.status_code, f"Error fetching offers for product {product_id}: {e}") from e
+
+        return ProductOffersResponse.from_dict(response)

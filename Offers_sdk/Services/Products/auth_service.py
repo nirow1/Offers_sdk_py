@@ -1,8 +1,13 @@
 import os
+
 from typing import Optional
 from datetime import datetime, timedelta
+from Offers_sdk.Core.Errors.http_errors import HttpError
 from Offers_sdk.Services.base_services_client import BaseServicesClient
 from Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
+from Offers_sdk.Core.Errors.Authentication_errors.authentication_error import AuthenticationError
+from Offers_sdk.Core.Errors.Authentication_errors.bad_auth_request_error import BadAuthRequestError
+from Offers_sdk.Core.Errors.Authentication_errors.invalid_credentials_error import InvalidCredentialsError
 
 
 class AuthService(BaseServicesClient):
@@ -23,14 +28,25 @@ class AuthService(BaseServicesClient):
             assert self._access_token is not None
             return self._access_token
 
-        response: AuthResponse = await self._http_client.request(bearer_token=self._refresh_token,
-                                                                 endpoint=self._endpoint_base,
-                                                                 method="POST",
-                                                                 data={"username": "demo", "password": "demo"})
+        try:
+            response: AuthResponse = await self._http_client.request(bearer_token=self._refresh_token,
+                                                                     endpoint=self._endpoint_base,
+                                                                     method="POST",
+                                                                     data={"username": "demo", "password": "demo"})
+        except HttpError as e:
+            if e.status_code == 400:
+                raise BadAuthRequestError(e.status_code,f"Malformed authentication request: {e.message}") from e
+            elif e.status_code == 401:
+                raise InvalidCredentialsError(e.status_code,f"Invalid credentials or expired token: {e.message}") from e
+            elif e.status_code == 422:
+                raise AuthenticationError(e.status_code,f"Authentication request validation failed: {e.message}") from e
+            else:
+                raise AuthenticationError(e.status_code, f"Authentication failed [{e.status_code}]: {e.message}") from e
 
         self._access_token = response["access_token"]
-        self._access_token_expiration = datetime.now() + timedelta(minutes=5)
+        self._access_token_expiration = datetime.now() + timedelta(minutes=10)
         return self._access_token
+
 
     def _is_access_token_valid(self) -> bool:
         return (self._access_token is not None

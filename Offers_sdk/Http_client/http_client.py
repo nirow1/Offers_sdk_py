@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from Offers_sdk.Core.Errors.http_errors import HTTPError
+from Offers_sdk.Core.Errors.http_errors import HttpError
 from typing import TypeVar, Literal
 from abc import ABC, abstractmethod
 
@@ -31,7 +31,7 @@ class HttpClient(ABC):
                 if attempt < self._max_retries:
                     await asyncio.sleep((2 ** (attempt - 1)))
 
-        raise HTTPError(
+        raise HttpError(
             500,
             f"Failed to fetch data after {self._max_retries} attempts: {last_error}",
             last_error)

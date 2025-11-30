@@ -1,5 +1,4 @@
-class HTTPError(Exception):
-    """Base class for HTTP errors."""
+class HttpError(Exception):
 
     def __init__(self, status_code: int, message: str = "", details: object = None):
         self.message = message or self.default_message()
@@ -15,5 +14,6 @@ class HTTPError(Exception):
     def details(self) -> object:
         return self._details
 
-    def default_message(self) -> str:
+    @staticmethod
+    def default_message() -> str:
         return "An HTTP error occurred."

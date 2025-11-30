@@ -1,12 +1,13 @@
 import asyncio
 
-from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
+from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
 from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
 from Offers_sdk.Services.Products.product_service import ProductsService
 from Offers_sdk.Services.services_config import base_aiohttp_config
 from Offers_sdk.Services.Products.auth_service import AuthService
 from Offers_sdk.Validation.schemas import RegisterProductSchema
 from Offers_sdk.Http_client.http_client import HttpClient
+from Offers_sdk.Core.Errors.http_errors import HttpError
 from multiprocessing.context import AuthenticationError
 from pydantic import ValidationError
 
@@ -34,13 +35,16 @@ class OffersApiClient:
             return await self._products_service.register_product(bearer_token, payload)
 
         except ValidationError as e:
+            # Schema validation failed
             raise ValueError(f"Invalid product payload: {e}") from e
 
         except AuthenticationError as e:
-            raise RuntimeError(f"Authentication failed: {e}") from e
+            # Any of BadAuthRequestError, InvalidCredentialsError, ForbiddenAuthError, etc.
+            raise ProductAuthenticationError(f"Authentication failed during product registration: {e}") from e
 
         except Exception as e:
-            raise RuntimeError(f"Unexpected error in register_product: {e}") from e
+            # Catch-all for unexpected issues (network, parsing, etc.)
+            raise ProductRegistrationUnexpectedError(f"Unexpected error in register_product: {e}") from e
 
     async def batch_register_products(self, products: list[RegisterProductRequest]):
         bearer_token = await self._auth_service.authenticate()
@@ -54,12 +58,5 @@ class OffersApiClient:
         return results
 
     async def get_offers(self, product_id: str):
-        try:
-            bearer_token = await self._auth_service.authenticate()
-            return await self._products_service.get_product_offers(bearer_token, product_id)
-        #todo: change this to actuall exception
-        except ValidationError as e:
-            raise ValueError(f"Product id was not found: {e}") from e
-
-        except Exception as e:
-            raise RuntimeError(f"Unexpected error in register_product: {e}") from e
+        bearer_token = await self._auth_service.authenticate()
+        return await self._products_service.get_product_offers(bearer_token, product_id)

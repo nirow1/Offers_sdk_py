@@ -3,7 +3,7 @@ import asyncio
 from uuid import UUID
 from dotenv import load_dotenv
 from Offers_sdk.offers_api_client import OffersApiClient
-from Offers_sdk.Core.Api_services.Requests.register_product_req import RegisterProductRequest
+from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
 
 async def main():
     # Construct a product request (could come from user input, DB, etc.)
