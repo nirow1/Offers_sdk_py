@@ -1,15 +1,18 @@
 import asyncio
 
-from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
-from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
-from Offers_sdk.Services.Products.product_service import ProductsService
-from Offers_sdk.Services.services_config import base_aiohttp_config
-from Offers_sdk.Services.Products.auth_service import AuthService
-from Offers_sdk.Validation.schemas import RegisterProductSchema
-from Offers_sdk.Http_client.http_client import HttpClient
-from Offers_sdk.Core.Errors.http_errors import HttpError
-from multiprocessing.context import AuthenticationError
 from pydantic import ValidationError
+from Offers_sdk.Http_client.http_client import HttpClient
+from Offers_sdk.Validation.schemas import RegisterProductSchema
+from Offers_sdk.Services.Products.auth_service import AuthService
+from Offers_sdk.Services.services_config import base_aiohttp_config
+from Offers_sdk.Services.Products.product_service import ProductsService
+from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
+from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
+from Offers_sdk.Core.Errors.Authentication_errors.authentication_error import AuthenticationError
+from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
+from Offers_sdk.Core.Errors.Offers_api_errors.product_registration_error import ProductRegistrationError
+from Offers_sdk.Core.Errors.Offers_api_errors.product_authentication_error import ProductAuthenticationError
+from Offers_sdk.Core.Errors.Offers_api_errors.invalid_product_payload_error import InvalidProductPayloadError
 
 
 class OffersApiClient:
@@ -35,16 +38,16 @@ class OffersApiClient:
             return await self._products_service.register_product(bearer_token, payload)
 
         except ValidationError as e:
-            # Schema validation failed
-            raise ValueError(f"Invalid product payload: {e}") from e
+            raise InvalidProductPayloadError(f"Invalid product payload: {e}") from e
 
         except AuthenticationError as e:
-            # Any of BadAuthRequestError, InvalidCredentialsError, ForbiddenAuthError, etc.
             raise ProductAuthenticationError(f"Authentication failed during product registration: {e}") from e
 
+        except ProductServiceError as e:
+            raise ProductRegistrationError(f"Product service error during registration: {e}") from e
+
         except Exception as e:
-            # Catch-all for unexpected issues (network, parsing, etc.)
-            raise ProductRegistrationUnexpectedError(f"Unexpected error in register_product: {e}") from e
+            raise Exception(f"Unexpected error in register_product: {e}") from e
 
     async def batch_register_products(self, products: list[RegisterProductRequest]):
         bearer_token = await self._auth_service.authenticate()

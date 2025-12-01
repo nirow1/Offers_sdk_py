@@ -3,7 +3,6 @@ from typing import Literal, Optional, Any
 
 import aiohttp
 
-# todo: test what happens if session_kwargs are wrong
 class AiohttpClient(HttpClient):
     def __init__(self, base_url: str | None = None, **session_kwargs: Any):
         super().__init__(base_url=base_url)
@@ -26,7 +25,7 @@ class AiohttpClient(HttpClient):
                          method: Literal["GET", "POST"],
                          data: Optional[U] | None = None
                          ) -> T:
-        headers = {"Authorization": f"Bearer {bearer_token}"}
+        headers = {"Bearer": bearer_token}
         url = f"{self._base_url}{endpoint}"
 
         async with self._session.request(method, url, headers=headers, json=data) as response:

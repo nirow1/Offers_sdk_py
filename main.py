@@ -8,7 +8,7 @@ from Offers_sdk.Core.Api_services.Requests.register_product_request import Regis
 async def main():
     # Construct a product request (could come from user input, DB, etc.)
     product = RegisterProductRequest(
-        id=UUID("550e8400-e29b-41d4-a716-446655440000"),
+        id=UUID("550e8400-e29b-41d4-a717-446655440000"),
         name="Real Product",
         description="This is a real product"
     )

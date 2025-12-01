@@ -32,7 +32,7 @@ class AuthService(BaseServicesClient):
             response: AuthResponse = await self._http_client.request(bearer_token=self._refresh_token,
                                                                      endpoint=self._endpoint_base,
                                                                      method="POST",
-                                                                     data={"username": "demo", "password": "demo"})
+                                                                     data=None)
         except HttpError as e:
             if e.status_code == 400:
                 raise BadAuthRequestError(e.status_code,f"Malformed authentication request: {e.message}") from e
@@ -44,7 +44,7 @@ class AuthService(BaseServicesClient):
                 raise AuthenticationError(e.status_code, f"Authentication failed [{e.status_code}]: {e.message}") from e
 
         self._access_token = response["access_token"]
-        self._access_token_expiration = datetime.now() + timedelta(minutes=10)
+        self._access_token_expiration = datetime.now() + timedelta(minutes=5)
         return self._access_token
 
 
