@@ -32,7 +32,7 @@ class HttpClient(ABC):
                     await asyncio.sleep((2 ** (attempt - 1)))
 
         raise HttpError(
-            500,
+            getattr(last_error, "status", 500),
             f"Failed to fetch data after {self._max_retries} attempts: {last_error}",
             last_error)
 

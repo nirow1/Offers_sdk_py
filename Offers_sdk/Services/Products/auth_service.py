@@ -5,9 +5,8 @@ from datetime import datetime, timedelta
 from Offers_sdk.Core.Errors.http_errors import HttpError
 from Offers_sdk.Services.base_services_client import BaseServicesClient
 from Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
-from Offers_sdk.Core.Errors.Authentication_errors.authentication_error import AuthenticationError
-from Offers_sdk.Core.Errors.Authentication_errors.bad_auth_request_error import BadAuthRequestError
-from Offers_sdk.Core.Errors.Authentication_errors.invalid_credentials_error import InvalidCredentialsError
+from Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import (AuthenticationError, BadAuthRequestError,
+                                                                                InvalidCredentialsError)
 
 
 class AuthService(BaseServicesClient):
@@ -35,11 +34,11 @@ class AuthService(BaseServicesClient):
                                                                      data=None)
         except HttpError as e:
             if e.status_code == 400:
-                raise BadAuthRequestError(e.status_code,f"Malformed authentication request: {e.message}") from e
+                raise BadAuthRequestError(e.status_code,f"Malformed authentication request: refresh token is invalid or unusable: {e.status_code}") from e
             elif e.status_code == 401:
-                raise InvalidCredentialsError(e.status_code,f"Invalid credentials or expired token: {e.message}") from e
+                raise InvalidCredentialsError(e.status_code,f"Invalid credentials or expired token: {e.status_code}") from e
             elif e.status_code == 422:
-                raise AuthenticationError(e.status_code,f"Authentication request validation failed: {e.message}") from e
+                raise AuthenticationError(e.status_code,f"Authentication request validation failed: {e.status_code}") from e
             else:
                 raise AuthenticationError(e.status_code, f"Authentication failed [{e.status_code}]: {e.message}") from e
 

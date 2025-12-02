@@ -1,6 +1,8 @@
 import asyncio
+import uuid
 
 from pydantic import ValidationError
+
 from Offers_sdk.Http_client.http_client import HttpClient
 from Offers_sdk.Validation.schemas import RegisterProductSchema
 from Offers_sdk.Services.Products.auth_service import AuthService
@@ -8,11 +10,13 @@ from Offers_sdk.Services.services_config import base_aiohttp_config
 from Offers_sdk.Services.Products.product_service import ProductsService
 from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
 from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
-from Offers_sdk.Core.Errors.Authentication_errors.authentication_error import AuthenticationError
+from Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import AuthenticationError
 from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
-from Offers_sdk.Core.Errors.Offers_api_errors.product_registration_error import ProductRegistrationError
-from Offers_sdk.Core.Errors.Offers_api_errors.product_authentication_error import ProductAuthenticationError
-from Offers_sdk.Core.Errors.Offers_api_errors.invalid_product_payload_error import InvalidProductPayloadError
+from Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors import (InvalidProductIdError,
+                                                                               ProductOffersFetchError,
+                                                                               ProductRegistrationError,
+                                                                               ProductAuthenticationError,
+                                                                               InvalidProductPayloadError)
 
 
 class OffersApiClient:
@@ -61,5 +65,20 @@ class OffersApiClient:
         return results
 
     async def get_offers(self, product_id: str):
-        bearer_token = await self._auth_service.authenticate()
-        return await self._products_service.get_product_offers(bearer_token, product_id)
+        try:
+            uuid.UUID(product_id, version=4)
+        except ValueError:
+            raise InvalidProductIdError(f": {product_id}")
+
+        try:
+            bearer_token = await self._auth_service.authenticate()
+            return await self._products_service.get_product_offers(bearer_token, product_id)
+
+        except AuthenticationError as e:
+            raise ProductAuthenticationError(f"Authentication failed during fetching offers: {e}") from e
+
+        except ProductServiceError as e:
+            raise ProductOffersFetchError(f"Product service error during fetching offers: {e}") from e
+
+        except Exception as e:
+            raise Exception(f"Unexpected error in register_product: {e}") from e

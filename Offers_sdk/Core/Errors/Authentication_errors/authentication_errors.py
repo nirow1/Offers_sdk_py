@@ -1,21 +1,16 @@
 from Offers_sdk.Core.Errors.http_errors import HttpError
 
 
-class ProductServiceError(HttpError):
+class AuthenticationError(HttpError):
     def __init__(self, status_code: int, message: str, details: object = None):
         super().__init__(status_code, message, details)
 
 
-class IdNotFoundError(ProductServiceError):
+class BadAuthRequestError(AuthenticationError):
     def __init__(self, status_code: int, message: str, details: object = None):
         super().__init__(status_code, message, details)
 
 
-class ProductAlreadyExistsError(ProductServiceError):
-    def __init__(self, status_code: int, message: str, details: object = None):
-        super().__init__(status_code, message, details)
-
-
-class UnauthorizedAccessError(ProductServiceError):
+class InvalidCredentialsError(AuthenticationError):
     def __init__(self, status_code: int, message: str, details: object = None):
         super().__init__(status_code, message, details)
