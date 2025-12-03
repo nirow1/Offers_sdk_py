@@ -6,6 +6,7 @@ from Offers_sdk.Services.Products.auth_service import AuthService
 from Offers_sdk.Services.services_config import base_aiohttp_config
 from Offers_sdk.Services.Products.product_service import ProductsService
 from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
+from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
 from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
 from Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import AuthenticationError
 from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
@@ -30,7 +31,21 @@ class OffersApiClient:
         if hasattr(self.http_client, "__aexit__"):
             await self.http_client.__aexit__(exc_type, exc, tb)
 
-    async def register_product(self, product: RegisterProductRequest):
+    async def register_product(self, product: RegisterProductRequest) -> RegisterProductResponse:
+        """
+            Registers a new product using the provided product details.
+
+            Args:
+                product (RegisterProductRequest): The product details to register.
+
+            Returns:
+                RegisterProductResponse: The response object from the product registration service.
+
+            Raises:
+                ProductAuthenticationError: If authentication fails during product registration.
+                ProductRegistrationError: If the product service fails to register the product.
+        """
+
         try:
             bearer_token = await self._auth_service.authenticate()
             return await self._products_service.register_product(bearer_token, product)
