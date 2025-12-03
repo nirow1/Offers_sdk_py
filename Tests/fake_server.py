@@ -3,7 +3,6 @@ from aiohttp.test_utils import TestServer, TestClient
 
 class FakeServer:
     def __init__(self, app_factory=None):
-        # Allow passing a custom app factory, default to empty app
         self.app = app_factory() if app_factory else web.Application()
         self._server = None
         self._client = None

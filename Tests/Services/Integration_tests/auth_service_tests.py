@@ -1,3 +1,5 @@
+import pytest
+
 from aiohttp import web
 from dotenv import load_dotenv
 from Tests.fake_server import FakeServer
@@ -9,6 +11,7 @@ from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
 async def authentication_handler(request):
     return web.json_response({"access_token": "fake_access_token_12345"})
 
+@pytest.mark.asyncio
 async def test_authenticate():
     load_dotenv()
     server = FakeServer()

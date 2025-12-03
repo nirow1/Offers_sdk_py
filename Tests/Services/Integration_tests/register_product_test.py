@@ -2,7 +2,6 @@ from uuid import UUID
 from aiohttp import web
 from pygments.lexers import data
 from Tests.fake_server import FakeServer
-from Offers_sdk.Validation.schemas import RegisterProductSchema
 from Offers_sdk.Services.Products.product_service import ProductsService
 from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
 from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
