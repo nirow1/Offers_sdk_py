@@ -1,5 +1,5 @@
-from typing import TypedDict
+from dataclasses import dataclass
 
-
-class AuthResponse(TypedDict):
+@dataclass
+class AuthResponse:
     access_token: str

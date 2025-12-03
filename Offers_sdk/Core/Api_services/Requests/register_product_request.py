@@ -1,8 +1,16 @@
-from typing import TypedDict
+from dataclasses import dataclass
 from uuid import UUID
 
 
-class RegisterProductRequest(TypedDict):
+@dataclass
+class RegisterProductRequest:
     id: UUID
     name: str
     description: str
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+        }

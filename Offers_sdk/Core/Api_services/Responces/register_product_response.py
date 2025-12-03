@@ -1,5 +1,6 @@
-from typing import TypedDict
+from dataclasses import dataclass
+from uuid import UUID
 
-
-class RegisterProductResponse(TypedDict):
-    id: str
+@dataclass
+class RegisterProductResponse:
+    id: UUID

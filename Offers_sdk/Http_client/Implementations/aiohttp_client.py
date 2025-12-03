@@ -1,7 +1,8 @@
-from Offers_sdk.Http_client.http_client import HttpClient, U, T
-from typing import Literal, Optional, Any
-
 import aiohttp
+
+from typing import Literal, Optional, Any
+from Offers_sdk.Http_client.http_client import HttpClient, U, T
+
 
 class AiohttpClient(HttpClient):
     def __init__(self, base_url: str | None = None, **session_kwargs: Any):
