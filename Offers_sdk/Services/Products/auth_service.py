@@ -28,21 +28,24 @@ class AuthService(BaseServicesClient):
             return self._access_token
 
         try:
-            response: AuthResponse = await self._http_client.request(bearer_token=self._refresh_token,
+            raw = await self._http_client.request(bearer_token=self._refresh_token,
                                                                      endpoint=self._endpoint_base,
                                                                      method="POST",
                                                                      data=None)
-        except HttpError as e:
-            if e.status_code == 400:
-                raise BadAuthRequestError(e.status_code,f"Malformed authentication request: refresh token is invalid or unusable: {e.status_code}") from e
-            elif e.status_code == 401:
-                raise InvalidCredentialsError(e.status_code,f"Invalid credentials or expired token: {e.status_code}") from e
-            elif e.status_code == 422:
-                raise AuthenticationError(e.status_code,f"Authentication request validation failed: {e.status_code}") from e
-            else:
-                raise AuthenticationError(e.status_code, f"Authentication failed [{e.status_code}]: {e.message}") from e
+            response = AuthResponse(**raw)
 
-        self._access_token = response["access_token"]
+        except HttpError as e:
+            match e.status_code:
+                case 400:
+                    raise BadAuthRequestError(e.status_code,f"Malformed authentication request: refresh token is invalid or unusable") from e
+                case 401:
+                    raise InvalidCredentialsError(e.status_code,f"Invalid credentials or expired token") from e
+                case 422:
+                    raise AuthenticationError(e.status_code,f"Authentication request validation failed") from e
+                case _:
+                    raise AuthenticationError(e.status_code, f"Authentication failed") from e
+
+        self._access_token = response.access_token
         self._access_token_expiration = datetime.now() + timedelta(minutes=5)
         return self._access_token
 

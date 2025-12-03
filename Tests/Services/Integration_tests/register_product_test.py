@@ -8,16 +8,16 @@ from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
 from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
 from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
 
-async def offers_handler(request):
+async def registration_handler(request):
     data = await request.json()
     # Return the expected API response
     return web.json_response({
         "id": data["id"]  # echo back the id
     })
 
-async def test_get_product_offers_success():
+async def test_register_product_success():
     server = FakeServer()
-    server.add_route("POST", "/api/v1/products/register", offers_handler)
+    server.add_route("POST", "/api/v1/products/register", registration_handler)
     await server.start()
 
     product = RegisterProductRequest(

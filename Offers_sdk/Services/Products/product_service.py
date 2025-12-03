@@ -28,7 +28,7 @@ class ProductsService(BaseServicesClient):
                                register_product_req: RegisterProductRequest,
                                ) -> RegisterProductResponse:
         try:
-            validated = RegisterProductSchema.model_validate(register_product_req, strict=True)
+            validated = RegisterProductSchema.model_validate(register_product_req.to_dict(), strict=True)
             payload = validated.model_dump(mode='json')
 
             response = await self._http_client.request(bearer_token,

@@ -8,7 +8,7 @@ from Offers_sdk.Core.Api_services.Requests.register_product_request import Regis
 async def main():
     # Construct a product request (could come from user input, DB, etc.)
     product = RegisterProductRequest(
-        id=UUID("550e890-1129c-41d4-a787-476855440500"),
+        id=UUID("550e890-1429c-41d4-a787-476855440500"),
         name="Real Product",
         description="This is a real product"
     )
@@ -21,7 +21,7 @@ async def main():
             result = await client.register_product(product)
             print("Product registered successfully:", result)
 
-            offers = await client.get_offers("550e890-1429c-41d4-a787-476855440500")
+            offers = await client.get_offers("550e899-1429c-41d4-a187-476855440500")
             print("Offers:", offers)
 
         except ValueError as e:
