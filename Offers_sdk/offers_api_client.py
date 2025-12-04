@@ -1,6 +1,7 @@
 import uuid
 import asyncio
 
+from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
 from Offers_sdk.Http_client.http_client import HttpClient
 from Offers_sdk.Services.Products.auth_service import AuthService
 from Offers_sdk.Services.services_config import base_aiohttp_config
@@ -56,7 +57,23 @@ class OffersApiClient:
         except ProductServiceError as e:
             raise ProductRegistrationError(f"{e.status_code}: Product service error during registration: {e}") from e
 
-    async def batch_register_products(self, products: list[RegisterProductRequest]):
+    async def batch_register_products(self, products: list[RegisterProductRequest]) -> list[RegisterProductResponse]:
+        """
+            Registers multiple products concurrently using the provided product details.
+
+            Args:
+                products (list[RegisterProductRequest]): A list of product registration requests.
+
+            Returns:
+                list[RegisterProductResponse]: A list of responses from the product registration service,
+                in the same order as the input products.
+
+            Raises:
+                ProductAuthenticationError: If authentication fails during batch product registration.
+                ProductRegistrationError: If the product service encounters an error while registering
+                one or more products.
+                Exception: For any unexpected error that occurs during execution.
+        """
         bearer_token = await self._auth_service.authenticate()
 
         tasks = [
@@ -67,7 +84,22 @@ class OffersApiClient:
         results = await asyncio.gather(*tasks)
         return results
 
-    async def get_offers(self, product_id: str):
+    async def get_offers(self, product_id: str) -> list[ProductOffersResponse]:
+        """
+            Fetches available offers for a given product.
+
+            Args:
+                product_id (str): The UUID (version 4) of the product whose offers should be retrieved.
+
+            Returns:
+                ProductOffersResponse: The response object containing the offers associated with the product.
+
+            Raises:
+                InvalidProductIdError: If the provided product_id is not a valid UUID v4.
+                ProductAuthenticationError: If authentication fails while fetching offers.
+                ProductOffersFetchError: If the product service encounters an error while fetching offers.
+                Exception: For any unexpected error that occurs during execution.
+        """
         try:
             uuid.UUID(product_id, version=4)
         except ValueError:
