@@ -2,12 +2,12 @@ import pytest
 
 from uuid import UUID
 from unittest.mock import AsyncMock
-from Offers_sdk.Core.Errors.http_errors import HttpError
-from Offers_sdk.Services.Products.product_service import ProductsService
-from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
-from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import (ProductServiceError,
-                                                                                  IdNotFoundError,
-                                                                                 UnauthorizedAccessError)
+from src.Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Services.Products.product_service import ProductsService
+from src.Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
+from src.Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import (ProductServiceError,
+                                                                                      IdNotFoundError,
+                                                                                      UnauthorizedAccessError)
 
 
 @pytest.mark.asyncio

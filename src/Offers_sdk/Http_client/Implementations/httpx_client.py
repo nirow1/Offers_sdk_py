@@ -1,4 +1,4 @@
-from Offers_sdk.Http_client.http_client import HttpClient, U, T
+from src.Offers_sdk.Http_client.http_client import HttpClient, U, T
 from typing import Literal
 
 import httpx

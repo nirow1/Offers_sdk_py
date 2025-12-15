@@ -3,11 +3,11 @@ import pytest
 from dotenv import load_dotenv
 from unittest.mock import AsyncMock
 from datetime import datetime, timedelta
-from Offers_sdk.Core.Errors.http_errors import HttpError
-from Offers_sdk.Services.Products.auth_service import AuthService
-from Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import (BadAuthRequestError,
-                                                                               InvalidCredentialsError,
-                                                                                AuthenticationError)
+from src.Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Services.Products.auth_service import AuthService
+from src.Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import (BadAuthRequestError,
+                                                                                    InvalidCredentialsError,
+                                                                                    AuthenticationError)
 
 
 @pytest.mark.asyncio

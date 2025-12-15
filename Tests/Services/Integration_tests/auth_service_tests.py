@@ -3,9 +3,9 @@ import pytest
 from aiohttp import web
 from dotenv import load_dotenv
 from Tests.fake_server import FakeServer
-from Offers_sdk.Services.Products.auth_service import AuthService
-from Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
-from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
+from src.Offers_sdk.Services.Products.auth_service import AuthService
+from src.Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
+from src.Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
 
 
 async def authentication_handler(request):

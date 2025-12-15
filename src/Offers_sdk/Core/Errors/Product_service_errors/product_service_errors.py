@@ -1,4 +1,4 @@
-from Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Core.Errors.http_errors import HttpError
 
 
 class ProductServiceError(HttpError):

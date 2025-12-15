@@ -3,13 +3,13 @@ from uuid import UUID
 import pytest
 from unittest.mock import AsyncMock
 
-from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
-from Offers_sdk.Core.Errors.http_errors import HttpError
-from Offers_sdk.Services.Products.product_service import ProductsService
-from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
-from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import (ProductServiceError,
-                                                                                  UnauthorizedAccessError,
-                                                                                  ProductAlreadyExistsError)
+from src.Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
+from src.Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Services.Products.product_service import ProductsService
+from src.Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
+from src.Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import (ProductServiceError,
+                                                                                      UnauthorizedAccessError,
+                                                                                      ProductAlreadyExistsError)
 
 
 @pytest.mark.asyncio

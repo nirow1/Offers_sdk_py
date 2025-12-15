@@ -2,8 +2,8 @@ import pytest
 
 from uuid import UUID
 from dotenv import load_dotenv
-from Offers_sdk.offers_api_client import OffersApiClient
-from Offers_sdk.Http_client.http_client import HttpClient
+from src.Offers_sdk.offers_api_client import OffersApiClient
+from src.Offers_sdk.Http_client.http_client import HttpClient
 
 # --- Fakes for testing ---
 class FakeHttpClient(HttpClient):

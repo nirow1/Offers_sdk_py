@@ -1,7 +1,7 @@
 import aiohttp
 
 from typing import Literal, Optional, Any
-from Offers_sdk.Http_client.http_client import HttpClient, U, T
+from src.Offers_sdk.Http_client.http_client import HttpClient, U, T
 
 
 class AiohttpClient(HttpClient):

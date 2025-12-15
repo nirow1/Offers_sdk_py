@@ -1,20 +1,20 @@
 import uuid
 import asyncio
 
-from Offers_sdk.Http_client.http_client import HttpClient
-from Offers_sdk.Services.Products.auth_service import AuthService
-from Offers_sdk.Services.services_config import base_aiohttp_config
-from Offers_sdk.Services.Products.product_service import ProductsService
-from Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
-from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
-from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
-from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
-from Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import AuthenticationError
-from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
-from Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors import (InvalidProductIdError,
-                                                                               ProductOffersFetchError,
-                                                                               ProductRegistrationError,
-                                                                               ProductAuthenticationError)
+from src.Offers_sdk.Http_client.http_client import HttpClient
+from src.Offers_sdk.Services.Products.auth_service import AuthService
+from src.Offers_sdk.Services.services_config import base_aiohttp_config
+from src.Offers_sdk.Services.Products.product_service import ProductsService
+from src.Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
+from src.Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
+from src.Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
+from src.Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
+from src.Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import AuthenticationError
+from src.Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
+from src.Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors import (InvalidProductIdError,
+                                                                                   ProductOffersFetchError,
+                                                                                   ProductRegistrationError,
+                                                                                   ProductAuthenticationError)
 
 
 class OffersApiClient:

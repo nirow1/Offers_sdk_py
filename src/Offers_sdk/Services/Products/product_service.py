@@ -1,18 +1,18 @@
 from uuid import UUID
 
 from pydantic import ValidationError
-from Offers_sdk.Core.Errors.http_errors import HttpError
-from Offers_sdk.Http_client.http_client import HttpClient
-from Offers_sdk.Services.base_services_client import BaseServicesClient
-from Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
-from Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
-from Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
-from Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors import InvalidProductPayloadError
-from Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import (ProductServiceError,
-                                                                                  UnauthorizedAccessError,
-                                                                                  ProductAlreadyExistsError,
-                                                                                  IdNotFoundError)
-from Offers_sdk.Validation.schemas import RegisterProductSchema
+from src.Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Http_client.http_client import HttpClient
+from src.Offers_sdk.Services.base_services_client import BaseServicesClient
+from src.Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
+from src.Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
+from src.Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
+from src.Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors import InvalidProductPayloadError
+from src.Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import (ProductServiceError,
+                                                                                      UnauthorizedAccessError,
+                                                                                      ProductAlreadyExistsError,
+                                                                                      IdNotFoundError)
+from src.Offers_sdk.Validation.schemas import RegisterProductSchema
 
 
 class ProductsService(BaseServicesClient):

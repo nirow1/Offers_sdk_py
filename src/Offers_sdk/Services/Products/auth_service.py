@@ -2,11 +2,11 @@ import os
 
 from typing import Optional
 from datetime import datetime, timedelta
-from Offers_sdk.Core.Errors.http_errors import HttpError
-from Offers_sdk.Services.base_services_client import BaseServicesClient
-from Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
-from Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import (AuthenticationError, BadAuthRequestError,
-                                                                                InvalidCredentialsError)
+from src.Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Services.base_services_client import BaseServicesClient
+from src.Offers_sdk.Core.Api_services.Responces.auth_response import AuthResponse
+from src.Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import (AuthenticationError, BadAuthRequestError,
+                                                                                    InvalidCredentialsError)
 
 
 class AuthService(BaseServicesClient):

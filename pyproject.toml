@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Offers_sdk_wg"
+version = "0.1.0"
+description = "A Python SDK for product offers and registration"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name="William Groman", email="william.groma@gmail.com" }
+]
+dependencies = [
+    "aiohttp~=3.13.2",
+    "pydantic~=2.12.5",
+    "httpx~=0.28.1",
+    "requests~=2.32.5",
+    "python-dotenv~=1.2.1"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest~=9.0.1",
+    "Flask~=3.1.2",
+    "Pygments~=2.19.2",
+    "twine~=4.0.3"
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/my-sdk"
