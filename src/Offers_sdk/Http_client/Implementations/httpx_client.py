@@ -23,7 +23,7 @@ class HttpxClient(HttpClient):
         method: Literal["GET", "POST"],
         data: U | None = None) -> T:
         url = f"{self._base_url}{endpoint}"
-        headers = {"Authorization": f"Bearer {bearer_token}"}
+        headers = {"Bearer": f" {bearer_token}"}
         response = await self._client.request(method, url, headers=headers, json=data)
         response.raise_for_status()
         return response.json()  # synchronous in httpx

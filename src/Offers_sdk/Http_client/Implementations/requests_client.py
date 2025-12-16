@@ -21,7 +21,7 @@ class RequestsClient(HttpClient):
                          method: Literal["GET", "POST"],
                          data: U | None = None
                          ) -> T:
-        headers = {"Authorization": f"Bearer {bearer_token}"}
+        headers = {"Bearer": f"{bearer_token}"}
         url = f"{self._base_url}{endpoint}"
 
         response = self._session.request(method, url, headers=headers, json=data)
