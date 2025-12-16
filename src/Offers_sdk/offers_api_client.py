@@ -6,8 +6,9 @@ from src.Offers_sdk.Services.Products.auth_service import AuthService
 from src.Offers_sdk.Services.services_config import base_aiohttp_config
 from src.Offers_sdk.Services.Products.product_service import ProductsService
 from src.Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
-from src.Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
-from src.Offers_sdk.Core.Api_services.Responces.register_product_response import RegisterProductResponse
+from src.Offers_sdk.Core.Api_services.Responses.batch_register_results import BatchRegisterResult
+from src.Offers_sdk.Core.Api_services.Responses.product_offers_response import ProductOffersResponse
+from src.Offers_sdk.Core.Api_services.Responses.register_product_response import RegisterProductResponse
 from src.Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
 from src.Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import AuthenticationError
 from src.Offers_sdk.Core.Errors.Product_service_errors.product_service_errors import ProductServiceError
@@ -57,7 +58,7 @@ class OffersApiClient:
         except ProductServiceError as e:
             raise ProductRegistrationError(f"{e.status_code}: Product service error during registration: {e}") from e
 
-    async def batch_register_products(self, products: list[RegisterProductRequest]) -> list[RegisterProductResponse]:
+    async def batch_register_products(self, products: list[RegisterProductRequest]) -> list[BatchRegisterResult]:
         """
             Registers multiple products concurrently using the provided product details.
 
@@ -81,8 +82,16 @@ class OffersApiClient:
             for product in products
         ]
 
-        results = await asyncio.gather(*tasks)
-        return results
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        final_results: list[BatchRegisterResult] = []
+        for product, res in zip(products, results):
+            if isinstance(res, Exception):
+                final_results.append(BatchRegisterResult(product, None, res))
+            else:
+                final_results.append(BatchRegisterResult(product=product, response=res))
+
+        return final_results
 
     async def get_offers(self, product_id: str) -> list[ProductOffersResponse]:
         """

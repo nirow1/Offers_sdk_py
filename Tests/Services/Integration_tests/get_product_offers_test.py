@@ -5,7 +5,7 @@ from aiohttp import web
 from Tests.fake_server import FakeServer
 from src.Offers_sdk.Services.Products.product_service import ProductsService
 from src.Offers_sdk.Http_client.Implementations.aiohttp_client import AiohttpClient
-from src.Offers_sdk.Core.Api_services.Responces.product_offers_response import ProductOffersResponse
+from src.Offers_sdk.Core.Api_services.Responses.product_offers_response import ProductOffersResponse
 
 
 # --- Shared handler ---
