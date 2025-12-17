@@ -1,5 +1,6 @@
 import uuid
 import asyncio
+from typing import cast
 
 from src.Offers_sdk.Http_client.http_client import HttpClient
 from src.Offers_sdk.Services.Products.auth_service import AuthService
@@ -82,14 +83,14 @@ class OffersApiClient:
             for product in products
         ]
 
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        raw_results = await asyncio.gather(*tasks, return_exceptions=True)
 
         final_results: list[BatchRegisterResult] = []
-        for product, res in zip(products, results):
+        for product, res in zip(products, raw_results):
             if isinstance(res, Exception):
-                final_results.append(BatchRegisterResult(product, None, res))
+                final_results.append(BatchRegisterResult(product=product, error=cast(Exception, res)))
             else:
-                final_results.append(BatchRegisterResult(product=product, response=res))
+                final_results.append(BatchRegisterResult(product=product, response=cast(RegisterProductResponse, res)))
 
         return final_results
 
