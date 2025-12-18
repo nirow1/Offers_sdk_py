@@ -3,6 +3,7 @@ import os
 from typing import Optional
 from datetime import datetime, timedelta
 from src.Offers_sdk.Core.Errors.http_errors import HttpError
+from src.Offers_sdk.Core.Infrastructure.token_catch import TokenCache
 from src.Offers_sdk.Services.base_services_client import BaseServicesClient
 from src.Offers_sdk.Core.Api_services.Responses.auth_response import AuthResponse
 from src.Offers_sdk.Core.Errors.Authentication_errors.authentication_errors import (AuthenticationError, BadAuthRequestError,
@@ -16,6 +17,7 @@ class AuthService(BaseServicesClient):
         self._refresh_token: str = os.environ["REFRESH_TOKEN"]
         self._access_token: Optional[str] = None
         self._access_token_expiration: Optional[datetime] = None
+        self._token_cache: TokenCache = TokenCache()
         self._endpoint_base: str = "/api/v1/auth"
 
     @property
@@ -23,7 +25,7 @@ class AuthService(BaseServicesClient):
         return self._endpoint_base
 
     async def authenticate(self) -> str:
-        if self._is_access_token_valid():
+        if  self._is_access_token_valid() or self._does_token_exist():
             assert self._access_token is not None
             return self._access_token
 
@@ -47,8 +49,17 @@ class AuthService(BaseServicesClient):
 
         self._access_token = response.access_token
         self._access_token_expiration = datetime.now() + timedelta(minutes=5)
+        self._token_cache.save(self._access_token, self._access_token_expiration)
         return self._access_token
 
+    def _does_token_exist(self) -> bool:
+        cached_token = self._token_cache.load()
+        if cached_token:
+            token, expiration = cached_token
+            self._access_token = token
+            self._access_token_expiration = expiration
+            return True
+        return False
 
     def _is_access_token_valid(self) -> bool:
         return (self._access_token is not None
