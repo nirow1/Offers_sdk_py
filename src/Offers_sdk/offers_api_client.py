@@ -20,6 +20,7 @@ from src.Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors impor
 
 
 class OffersApiClient:
+    #todo: solve the issue of sync and async clients
     def __init__(self, http_client: HttpClient | None = None):
         self.http_client = http_client if http_client is not None else AiohttpClient(**base_aiohttp_config)
         self._products_service: ProductsService= ProductsService(self.http_client)

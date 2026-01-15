@@ -2,7 +2,7 @@ import os
 import json
 
 from typing import Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class TokenCache:
@@ -20,9 +20,21 @@ class TokenCache:
     def load(self) -> Optional[Tuple[str, datetime]]:
         if not os.path.exists(self._path):
             return None
+
         with open(self._path, "r") as f:
             data = json.load(f)
-        expires_at = datetime.fromisoformat(data["expires_at"])
+
+        try:
+            expires_at = datetime.fromisoformat(data["expires_at"])
+            token = data["token"]
+        except:
+            return None
+
         if datetime.now() >= expires_at:
             return None  # expired
-        return data["token"], expires_at
+        return token, expires_at
+
+
+if __name__ == '__main__':
+    cache = TokenCache()
+    print(cache.load())

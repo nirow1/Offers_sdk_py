@@ -32,6 +32,7 @@ async def example():
     load_dotenv()
 
     # Use the client as a context manager
+    # todo: přidat rozděleni stahování clientů do toml
     async with OffersApiClient() as client:
         result = await client.register_product(product)
         print("Product registered successfully:", result)
