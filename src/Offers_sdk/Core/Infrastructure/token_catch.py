@@ -2,7 +2,7 @@ import os
 import json
 
 from typing import Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class TokenCache:
@@ -33,8 +33,3 @@ class TokenCache:
         if datetime.now() >= expires_at:
             return None  # expired
         return token, expires_at
-
-
-if __name__ == '__main__':
-    cache = TokenCache()
-    print(cache.load())

@@ -7,6 +7,7 @@ from src.Offers_sdk.Core.Api_services.Requests.register_product_request import R
 
 async def example():
     # Construct a product request (could come from user input, DB, etc.)
+    # todo validation at product creation level
     product = RegisterProductRequest(
         id=UUID("550e9400-e29b-41d4-a716-446685444000"),
         name="Real Product",
@@ -32,7 +33,6 @@ async def example():
     load_dotenv()
 
     # Use the client as a context manager
-    # todo: přidat rozděleni stahování clientů do toml
     async with OffersApiClient() as client:
         result = await client.register_product(product)
         print("Product registered successfully:", result)

@@ -1,9 +1,9 @@
 from uuid import UUID
 
+from pydantic import TypeAdapter
 from pydantic import ValidationError
 from src.Offers_sdk.Core.Errors.http_errors import HttpError
 from src.Offers_sdk.Http_client.http_client import HttpClient
-from src.Offers_sdk.Validation.schemas import RegisterProductSchema
 from src.Offers_sdk.Services.base_services_client import BaseServicesClient
 from src.Offers_sdk.Core.Api_services.Responses.product_offers_response import ProductOffersResponse
 from src.Offers_sdk.Core.Api_services.Requests.register_product_request import RegisterProductRequest
@@ -19,6 +19,7 @@ class ProductsService(BaseServicesClient):
     def __init__(self, http_client: HttpClient):
         super().__init__(http_client)
         self._endpoint_base = "/api/v1/products"
+        self.adapter = TypeAdapter(RegisterProductRequest)
 
     @property
     def endpoint_base(self) -> str:
@@ -28,8 +29,7 @@ class ProductsService(BaseServicesClient):
                                register_product_req: RegisterProductRequest,
                                ) -> RegisterProductResponse:
         try:
-            validated = RegisterProductSchema.model_validate(register_product_req.to_dict(), strict=True)
-            payload = validated.model_dump(mode='json')
+            payload = self.adapter.dump_python(register_product_req, mode='json', exclude_none=True)
 
             response = await self._http_client.request(bearer_token,
                                              f"{self.endpoint_base}/register",
