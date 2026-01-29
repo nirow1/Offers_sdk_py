@@ -21,6 +21,13 @@ from src.Offers_sdk.Core.Errors.Offers_api_errors.Offers_api_custom_errors impor
 
 class OffersApiClient:
     #todo: solve the issue of sync and async clients
+    #todo: upload to testPyPi
+    #todo: release v1.0.0
+    #todo: try to implement retry logic with exponential backoff
+    #todo: look if there can be made any improvements on env/config files
+    #todo: add synchronous wrapper for the async implementation
+
+
     def __init__(self, http_client: HttpClient | None = None):
         self.http_client = http_client if http_client is not None else AiohttpClient(**base_aiohttp_config)
         self._products_service: ProductsService= ProductsService(self.http_client)

@@ -1,3 +1,4 @@
+# TOML
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -11,22 +12,26 @@ license = { file = "LICENSE" }
 authors = [
     { name="William Groman", email="william.groma@gmail.com" }
 ]
+# base dependencies
 dependencies = [
-    "aiohttp~=3.13.2",
     "pydantic~=2.12.5",
-    "httpx~=0.28.1",
-    "requests~=2.32.5",
     "python-dotenv~=1.2.1"
 ]
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
+# user can choose one of the following HTTP clients:
+aiohttp = ["aiohttp~=3.13.2"]
+httpx = ["httpx~=0.28.1"]
+requests = ["requests~=2.32.5"]
+
+# choosable dependencies for development and testing
 dev = [
     "pytest~=9.0.1",
     "Flask~=3.1.2",
     "Pygments~=2.19.2",
     "twine~=4.0.3"
 ]
-requires-python = ">=3.10"
 
 [project.urls]
 Homepage = "https://github.com/yourusername/my-sdk"
